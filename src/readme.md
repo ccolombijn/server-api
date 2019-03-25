@@ -96,8 +96,9 @@ is converted into a call of the diag proc with one parameter: {three:3, blind:"v
 
 ## Bugs and limitations
 
-Not yet thoroughly tested.
-form attribute not implemented yet.
++ Not yet thoroughly tested.
++ Verbose is not yet implemented.
++ form attribute not implemented yet.
 
 ## AUTHOR
 

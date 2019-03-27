@@ -1,8 +1,8 @@
-# README.MD apiloader
+# REST API Loader & tool
 
 ## Intro
 
-API loader, once installed, loads a JSON config file from a command 
+API loader, once installed, loads a JSON config file (which can be generated with tool) from a command 
 
 ## How to use
 
@@ -33,6 +33,7 @@ This command loads [config].json, residing in the same folder as the script, whi
 }
 
 ```
+
 Which adds the following routes & methods to the API, with the following available requests to the API;
 
 | URL     | Method | Db Table accessed    |
@@ -41,3 +42,9 @@ Which adds the following routes & methods to the API, with the following availab
 | myhost:8081/api/players/:id       | GET |  players |
 | myhost:8081/api/players/:id      | PUT |  players {json}|
 | myhost:8081/api/players/:id       | DELETE |  players |
+
+## Generate config with `tool -g`
+Create a new JSON file with the following command
+```
+node tool -g config
+```

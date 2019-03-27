@@ -2,7 +2,7 @@
 
 ## Intro
 
-API loader, once installed, loads a JSON file from a command
+API loader, once installed, loads a JSON config file from a command 
 
 ## How to use
 
@@ -11,7 +11,7 @@ API loader, once installed, loads a JSON file from a command
 node api [config]
 ```
 
-This command loads [config].json, residing in the same folder as the script, which has teh following layout:
+This command loads [config].json, residing in the same folder as the script, which has the following layout:
 
 ```
 {
@@ -33,7 +33,7 @@ This command loads [config].json, residing in the same folder as the script, whi
 }
 
 ```
-Which adds the following routes & methods results from requests to the API;
+Which adds the following routes & methods to the API, with the following available requests to the API;
 
 | URL     | Method | Db Table accessed    |
 | :------------- | :------------- | :--------------|

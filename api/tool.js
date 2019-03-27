@@ -7,36 +7,86 @@ const rl = readline.createInterface({
 });
 
 const generate = (function(){
+
+
   const config = () => {
     let configName;
     const configObj = {}
+    const configRouteFields = (configRouteObj) => {
+      rl.question('Add field: ', (field) => {
+        if( field != '' ){
+          configRouteObj.fields.push(field)
+          configRouteFields(configRouteObj)
+        }else{
+          configObj.routes.push(configRouteObj)
+          configRoute()
+        }
+
+      })
+    }
+    const configRoute = () => {
+      let configRouteObj = {}
+      rl.question('Route : ', (route) => {
+        if( route != '' ){
+          configRouteObj['route'] = route
+        }else{
+          return configFinalize()
+        }
+        rl.question('Key: ', (key) => {
+          configRouteObj['key'] = key
+          configRouteObj['methods'] = []
+          rl.question('Add GET: ', (get) => {
+            if( get === 'y' ) configRouteObj.methods.push('get')
+            rl.question('Add PUT: ', (put) => {
+              if( put === 'y' ) configRouteObj.methods.push('put')
+              rl.question('Add POST: ', (post) => {
+                if( post === 'y' ) configRouteObj.methods.push('get')
+                rl.question('Add DELETE: ', (del) => {
+                  if( del === 'y' ) configRouteObj.methods.push('delete')
+
+                  configRouteObj['fields'] = []
+                  configRouteFields(configRouteObj)
+
+                })
+              })
+            })
+          })
+        })
+      })
+    }
+    const configFinalize = () =>{
+      console.log( configObj )
+      fs.writeFile(`${configName}.json`, JSON.stringify(configObj, null, 2), function(err) {
+        if(err) {
+          return console.log(err);
+        }
+
+        console.log(`${configName}.json was saved`);
+      });
+      rl.close();
+    }
+    const configDatabase = () =>{
+      rl.question('Database host : ', (host) => {
+        configObj.db['host'] = host
+        rl.question('Database user : ', (user) => {
+          configObj.db['user'] = user
+          rl.question('Database password : ', (pass) => {
+            configObj.db['password'] = pass
+            rl.question('Database : ', (database) => {
+              configObj.db['database'] = database
+              configObj['routes'] = []
+              configRoute()
+            });
+          });
+        });
+      });
+    }
     rl.question('Name : ', (name) => {
       configName = name
       rl.question('API prefix : ', (prefix) => {
         configObj['prefix'] = prefix
         configObj['db'] = {}
-        rl.question('Database host : ', (host) => {
-          configObj.db['host'] = host
-          rl.question('Database user : ', (user) => {
-            configObj.db['user'] = user
-            rl.question('Database password : ', (pass) => {
-              configObj.db['password'] = pass
-              rl.question('Database : ', (database) => {
-                configObj.db['database'] = database
-                configObj['routes'] = []
-                console.log( configObj )
-                fs.writeFile(`${configName}.json`, JSON.stringify(configObj), function(err) {
-                  if(err) {
-                    return console.log(err);
-                  }
-
-                  console.log(`${configName}.json was saved`);
-                });
-                rl.close();
-              });
-            });
-          });
-        });
+        configDatabase()
       });
     });
 
@@ -54,7 +104,7 @@ const generate = (function(){
 
 const config = (function(){
   const modules = [
-    { label : 'Generate', name : '-gen', module : generate }
+    { label : 'Generate', name : '-g', module : generate }
   ]
 
   return {

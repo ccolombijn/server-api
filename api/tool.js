@@ -23,7 +23,15 @@ const generate = (function(){
               configObj.db['password'] = pass
               rl.question('Database : ', (database) => {
                 configObj.db['database'] = database
+                configObj['routes'] = []
                 console.log( configObj )
+                fs.writeFile(`${configName}.json`, JSON.stringify(configObj), function(err) {
+                  if(err) {
+                    return console.log(err);
+                  }
+
+                  console.log(`${configName}.json was saved`);
+                });
                 rl.close();
               });
             });

@@ -224,7 +224,7 @@ const setRoutes = (function(){
       ? `${item.route}/:${item.key}`
       : item.route
       console.log( `api.set.${method} ${route} ${fields}`)
-      item.fields ? set[method](item.route,item.fields) :  set[method](item.route)
+      item.fields ? set[method](route,item.fields) :  set[method](route)
     }
   }
   // for( let item of config.routes ) set[item.method](item.route,item.fields)

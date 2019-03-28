@@ -2,7 +2,7 @@
 
 ## Intro
 
-API loader, once installed, loads a JSON config file (which can be generated with tool) from a command 
+Loads a JSON config file  from command to start a REST API service.
 
 ## How to use
 
@@ -11,13 +11,13 @@ API loader, once installed, loads a JSON config file (which can be generated wit
 node api [config]
 ```
 
-This command loads [config].json, residing in the same folder as the script, which has the following layout:
+This command loads `[config].json` (which can be generated with `tool -g config`, see below), residing in the same folder as the script, which has the following layout:
 
 ```
 {
   "prefix" : "api",
   "db" : {
-    "host" : "localhost",
+    "host" : "myhost:8081",
     "user" : "root",
     "password" : "root",
     "database" : "quiz"

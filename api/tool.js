@@ -1,5 +1,6 @@
 'use strict'
-const fs = require('fs')
+const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -105,12 +106,55 @@ const generate = (function(){
 
 const update = (function(){
   const config = () => {
+    const configs = []
+    const routes = []
+    const directoryPath = path.join(__dirname, './');
+    fs.readdir(directoryPath, function (err, files) {
+      if (err) {
+        return console.log('Unable to scan directory: ' + err);
+      }
+
+      files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        //if(file.includes('.json')) configs.push(file.replace('.json',''))
+        if(file.includes('.json')) console.log(` - ${file.replace('.json','')}` )
+      });
+    });
+
+
     let configName, configObj
+
     rl.question('Enter config to update : ', (name) => {
       configName = name
-      configObj = JSON.parse(fs.readFileSync(`./api/${process.argv[2]}.json`, 'utf8'))
-      console.log(configObj)
+      configObj = JSON.parse(fs.readFileSync(`./api/${name}.json`, 'utf8'))
+      rl.question(`Enter property to update from '${name}' (prefix, db, routes) : `, (prop) => {
+        if(prop === 'routes'){
+          configRoutes(name)
+        }
+      })
+
     });
+
+    const configRoutes = (name) => {
+      console.log( `Current routes in '${name}'`)
+      for( let routeObj of configObj.routes ){
+        console.log(`- ${routeObj.route}`)
+        routes.push(routeObj.route)
+      }
+
+      rl.question('Enter route to update or new route to add: ', (route) => {
+        if( routes.includes(route) ){
+          rl.question(`Field to update from route '${route}' (route,key,methods,fields)`, (field) => {
+
+          });
+        }else{
+          rl.question('Key: ', (key) => {
+
+          });
+        }
+      });
+    }
+
   }
   return{
     config : config
@@ -174,7 +218,6 @@ const application = (function(){
           console.log( `${module.label} : node ${path[pos]} ${module.name} ${method}` )
         }
       }
-      
     }
   }else{
     const output = document.querySelector( '#output' )

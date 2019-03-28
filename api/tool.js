@@ -37,21 +37,34 @@ const generate = (function(){
           configRouteObj['methods'] = []
           rl.question('Add GET: ', (get) => {
             if( get === 'y' ) configRouteObj.methods.push('get')
-            rl.question( 'Add GET all:', (get))
+            rl.question('Add GET all', (getall) => {
+              if( getall === 'y' ) configRouteObj.methods.push('getAll')
+              rl.question('Add PUT: ', (put) => {
+                if( put === 'y' ) configRouteObj.methods.push('put')
+                rl.question('Add POST: ', (post) => {
+                  if( post === 'y' ) configRouteObj.methods.push('get')
+                  rl.question('Add DELETE: ', (del) => {
+                    if( del === 'y' ) configRouteObj.methods.push('delete')
 
+                    configRouteObj['fields'] = []
+                    configRouteFields(configRouteObj)
 
+                  })
+                })
+              })
+            })
           })
         })
       })
     }
     const configFinalize = () =>{
       console.log( configObj )
-      fs.writeFile(`${configName}.json`, JSON.stringify(configObj, null, 2), function(err) {
+      fs.writeFile(`./api/${configName}.json`, JSON.stringify(configObj, null, 2), function(err) {
         if(err) {
           return console.log(err);
         }
 
-        console.log(`${configName}.json was saved`);
+        console.log(`Saved config data to ./api/${configName}.json`);
       });
       rl.close();
     }
@@ -90,11 +103,25 @@ const generate = (function(){
   }
 })()
 
+const update = (function(){
+  const config = () => {
+    let configName, configObj
+    rl.question('Enter config to update : ', (name) => {
+      configName = name
+      configObj = JSON.parse(fs.readFileSync(`./api/${process.argv[2]}.json`, 'utf8'))
+      console.log(configObj)
+    });
+  }
+  return{
+    config : config
+  }
+})()
 
 
 const config = (function(){
   const modules = [
-    { label : 'Generate', name : '-g', module : generate }
+    { label : 'Generate', name : '-g', module : generate },
+    { label : 'Update', name : '-u', module : update }
   ]
 
   return {
@@ -147,6 +174,7 @@ const application = (function(){
           console.log( `${module.label} : node ${path[pos]} ${module.name} ${method}` )
         }
       }
+      
     }
   }else{
     const output = document.querySelector( '#output' )

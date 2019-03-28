@@ -178,6 +178,7 @@ const api = (function(){
 
   return {
     get : _get,
+    getAll : getAll,
     put : _put,
     post : _post,
     delete : _delete
@@ -196,10 +197,10 @@ const setRoutes = (function(){
       ? `${item.route}/:${item.key}`
       : item.route
       console.log( `api.set.${method} ${route} ${fields}`)
-      item.fields ? set[method](route,item.fields) :  set[method](route)
+      method === 'put' ? set[method](route,item.fields) :  set[method](route)
     }
   }
-  
+
  })()
 
 

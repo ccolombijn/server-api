@@ -1,17 +1,26 @@
 {
-  "prefix" : "api",
-  "db" : {
-    "host" : "localhost",
-    "user" : "root",
-    "password" : "root",
-    "database" : "quiz"
+  "prefix": "api",
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "database": "quiz"
   },
-  "routes" : [
-    { "route" : "players",
-      "key" : "id",
-      "methods" : [ "get", "put", "post", "delete"],
-      "fields" : [ "name","score"]
+  "routes": [
+    {
+      "route": "players",
+      "key": "id",
+      "methods": [
+        "get",
+        "getAll",
+        "put",
+        "get",
+        "delete"
+      ],
+      "fields": [
+        "name",
+        "score"
+      ]
     }
-
   ]
 }

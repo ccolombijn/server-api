@@ -38,7 +38,7 @@ const generate = (function(){
           configRouteObj['methods'] = []
           rl.question('Add GET: ', (get) => {
             if( get === 'y' ) configRouteObj.methods.push('get')
-            rl.question('Add GET all', (getall) => {
+            rl.question('Add GET all:', (getall) => {
               if( getall === 'y' ) configRouteObj.methods.push('getAll')
               rl.question('Add PUT: ', (put) => {
                 if( put === 'y' ) configRouteObj.methods.push('put')

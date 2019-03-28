@@ -17,7 +17,7 @@ This command loads `[config].json` (which can be generated with `tool -g config`
 {
   "prefix" : "api",
   "db" : {
-    "host" : "localhost",
+    "host" : "myhost:8081",
     "user" : "root",
     "password" : "root",
     "database" : "quiz"

@@ -17,8 +17,8 @@ const api = (function(){
     next()
   })
   // config
-  const config = process.argv[3]
-  ? fs.readFile( `${process.argv[3]}.json`, (err, data)=>JSON.parse(data))
+  const config = process.argv[2]
+  ? JSON.parse(fs.readFileSync(`./api/${process.argv[2]}.json`, 'utf8'))
   : {
     db : {
       host: 'localhost',
@@ -27,12 +27,6 @@ const api = (function(){
       database: 'quiz'
     },
     routes : [
-
-      /*{ route : 'players' }, //set.getAll
-      { route : 'players/:id' , method : 'get' }, // set.getOne
-      { route : 'players/:id', method : 'delete' }, // set.delete
-      { route : 'players', method : 'post' }, // set.post
-      { route : 'players/:id', method : 'put', fields : ['name','score'] }*/  // set.put
       { route : 'players',
         methods : [ 'get', 'delete', 'post', 'put' ],
         key : 'id',
@@ -191,34 +185,12 @@ const api = (function(){
 })()
 
 const setRoutes = (function(){
-  /*const setMethod = (item) => {
-    if(  item.route.split(':')[1] && item.method === 'delete'){ //delete
-      console.log(`${item.route.split('/')[0]} delete`)
-      set.delete( item.route )
-
-    }else if ( item.route.split(':')[1] && item.method === 'get' ) { // getOne
-      console.log(`${item.route.split('/')[0]} getOne`)
-      set.get( item.route )
-
-    }else if (item.method === 'put' && item.fields ) { // put
-      console.log(`${item.route} put`)
-      set.put( item.route, item.fields )
-
-    }else if (item.method === 'post' ) { // post
-      console.log(`${item.route} post`)
-      set.post( item.route )
-
-    }else { // getAll
-      console.log(`${item.route} getAll`)
-      set.get( item.route )
-
-    }
-  }*/
 
   for( let item of config.routes ){
     //setMethod( item )
     for( let method of item.methods) {
-      const fields = item.fields ? ' '+item.fields.join(',') : ''
+
+      let fields = ( method === 'put') ? ' '+item.fields.join(',') : ''
 
       let route = ( method === 'get' || method === 'delete' || method === 'put' )
       ? `${item.route}/:${item.key}`
@@ -227,7 +199,7 @@ const setRoutes = (function(){
       item.fields ? set[method](route,item.fields) :  set[method](route)
     }
   }
-  // for( let item of config.routes ) set[item.method](item.route,item.fields)
+  
  })()
 
 

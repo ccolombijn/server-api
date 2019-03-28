@@ -37,19 +37,9 @@ const generate = (function(){
           configRouteObj['methods'] = []
           rl.question('Add GET: ', (get) => {
             if( get === 'y' ) configRouteObj.methods.push('get')
-            rl.question('Add PUT: ', (put) => {
-              if( put === 'y' ) configRouteObj.methods.push('put')
-              rl.question('Add POST: ', (post) => {
-                if( post === 'y' ) configRouteObj.methods.push('get')
-                rl.question('Add DELETE: ', (del) => {
-                  if( del === 'y' ) configRouteObj.methods.push('delete')
+            rl.question( 'Add GET all:', (get))
 
-                  configRouteObj['fields'] = []
-                  configRouteFields(configRouteObj)
 
-                })
-              })
-            })
           })
         })
       })

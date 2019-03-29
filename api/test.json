@@ -1,0 +1,26 @@
+{
+  "prefix": "bla",
+  "db": {
+    "host": "localhost",
+    "user": "root",
+    "password": "root",
+    "database": "quiz"
+  },
+  "routes": [
+    {
+      "route": "players",
+      "key": "id",
+      "methods": [
+        "get",
+        "getAll",
+        "put",
+        "get",
+        "delete"
+      ],
+      "fields": [
+        "name",
+        "score"
+      ]
+    }
+  ]
+}

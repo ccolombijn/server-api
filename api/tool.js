@@ -1,5 +1,6 @@
 'use strict'
-const fs = require('fs')
+const fs = require('fs');
+const path = require('path');
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
@@ -37,7 +38,7 @@ const generate = (function(){
           configRouteObj['methods'] = []
           rl.question('Add GET: ', (get) => {
             if( get === 'y' ) configRouteObj.methods.push('get')
-            rl.question('Add GET all', (getall) => {
+            rl.question('Add GET all:', (getall) => {
               if( getall === 'y' ) configRouteObj.methods.push('getAll')
               rl.question('Add PUT: ', (put) => {
                 if( put === 'y' ) configRouteObj.methods.push('put')
@@ -105,12 +106,105 @@ const generate = (function(){
 
 const update = (function(){
   const config = () => {
-    let configName, configObj
-    rl.question('Enter config to update : ', (name) => {
-      configName = name
-      configObj = JSON.parse(fs.readFileSync(`./api/${process.argv[2]}.json`, 'utf8'))
-      console.log(configObj)
+    const configs = []
+    const routes = []
+    const directoryPath = path.join(__dirname, './');
+    fs.readdir(directoryPath, function (err, files) {
+
+      if (err) {
+        return console.log('Unable to scan directory: ' + err);
+      }else{
+        console.log(`Current configs in ${directoryPath}`)
+      }
+
+      files.forEach(function (file) {
+        // Do whatever you want to do with the file
+        //if(file.includes('.json')) configs.push(file.replace('.json',''))
+        if(file.includes('.json')) console.log(` - ${file.replace('.json','')}` )
+      });
+      let configName, configObj
+
+      rl.question('Enter config to update : ', (name) => {
+        configName = name
+        configObj = JSON.parse(fs.readFileSync(`./api/${name}.json`, 'utf8'))
+        configProps(name)
+
+      });
     });
+
+
+
+
+    const configProps = (name) => {
+      rl.question(`Enter property to update from '${name}' (prefix, db, routes) : `, (prop) => {
+        if(prop === 'routes'){
+          configRoutes(name)
+        }else if(prop === 'prefix'){
+          configPrefix(name)
+        }else if(prop === 'db'){
+          configDb(name)
+        }
+      })
+    }
+
+    const configRoutes = (name) => {
+      console.log( `Current routes in '${name}'`)
+      for( let routeObj of configObj.routes ){
+        console.log(`- ${routeObj.route}`)
+        routes.push(routeObj.route)
+      }
+
+      rl.question('Enter route to update or new route to add: ', (route) => {
+        if( routes.includes(route) ){
+          rl.question(`Field to update from route '${route}' (route,key,methods,fields)`, (field) => {
+
+          });
+        }else{
+          rl.question('Key: ', (key) => {
+
+          });
+        }
+      });
+    }
+
+      const configPrefix = (name) =>{
+        rl.question(`Update prefix (current : ${configObj.prefix}) :`, (prefix) => {
+          if(prefix != '') configObj.prefix = prefix
+          configProps(name)
+        });
+      }
+
+      const configDb = (name) =>{
+        rl.question(`Enter property to update from db (host, user, password, database):`, (prop) => {
+          if(prop === 'host'){
+            rl.question(`Update host (current : ${configObj.db.host}):`, (host) => {
+              if(host != '') configObj.db.host = host
+              configDb(name)
+            })
+          }else if (prop === 'user') {
+            rl.question(`Update user (current : ${configObj.db.user}):`, (user) => {
+              if(user != '') configObj.db.user = user
+              configDb(name)
+            })
+          }else if (prop === 'password') {
+            rl.question(`Update password (current : ${configObj.db.password}):`, (password) => {
+              if(password != '') configObj.db.password = password
+              configDb(name)
+            })
+          }else if (prop === 'database') {
+            rl.question(`Update database (current : ${configObj.db.database}):`, (database) => {
+              if(database != '') configObj.db.database = database
+              configDb(name)
+            })
+          }else{
+
+            configProps(name)
+
+          }
+
+        });
+      }
+
   }
   return{
     config : config
@@ -139,6 +233,7 @@ const application = (function(){
     let name = endpoint[0],
     action = endpoint[1],
     args = endpoint[2]
+    console.log(config.modules)
     for( let module of config.modules ){
       if( module.name === name ){
         try{
@@ -174,7 +269,6 @@ const application = (function(){
           console.log( `${module.label} : node ${path[pos]} ${module.name} ${method}` )
         }
       }
-      
     }
   }else{
     const output = document.querySelector( '#output' )

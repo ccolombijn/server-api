@@ -145,7 +145,7 @@ const update = (function(){
           configDb(name)
         }
       })
-    } 
+    }
 
     const configRoutes = (name) => {
       console.log( `Current routes in '${name}'`)
@@ -233,6 +233,7 @@ const application = (function(){
     let name = endpoint[0],
     action = endpoint[1],
     args = endpoint[2]
+    console.log(config.modules)
     for( let module of config.modules ){
       if( module.name === name ){
         try{

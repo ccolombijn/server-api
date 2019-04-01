@@ -44,7 +44,13 @@ Which adds the following routes & methods to the API, with the following availab
 | myhost:8081/api/players/:id       | DELETE |  players |
 
 ## Generate config with `tool -g`
-Create a new JSON file with the following command
+Create a new JSON config file with the following command
+```
+node tool -g config
+```
+
+## Update config with `tool -u`
+Update a existing JSON config file with the following command
 ```
 node tool -g config
 ```

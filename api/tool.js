@@ -1,12 +1,13 @@
 'use strict'
 const fs = require('fs');
 const path = require('path');
+const mysql = require( 'mysql' );
 const readline = require('readline');
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-
+const connectDb =  mysql.createConnection;
 const generate = (function(){
 
 
@@ -78,8 +79,12 @@ const generate = (function(){
             configObj.db['password'] = pass
             rl.question('Database : ', (database) => {
               configObj.db['database'] = database
-              configObj['routes'] = []
-              configRoute()
+              connectDb( configObj.db ).connect((err) => {
+                 console.log(`Connected to database '${database}'`);
+                 configObj['routes'] = []
+                 configRoute()
+               })
+
             });
           });
         });
@@ -210,7 +215,7 @@ const update = (function(){
     config : config
   }
 })()
-
+// -----------------------------------------------------------------------------
 
 const config = (function(){
   const modules = [
@@ -233,7 +238,6 @@ const application = (function(){
     let name = endpoint[0],
     action = endpoint[1],
     args = endpoint[2]
-    console.log(config.modules)
     for( let module of config.modules ){
       if( module.name === name ){
         try{
